@@ -72,22 +72,19 @@ body{background:#eee;width:100%; overflow-x:hidden}
 <script>
 
 var startTop,endTop,//开始结束scrollTop
-startX,//点击x
-startY,//点击x
-direct="down";//滚动方向
-var endX;
-var endY;
-var box=document.getElementById("top");
-var boxheight=parseInt(box.offsetHeight);
-var transy=0;
-var scale=1;
-var easestart = 0, easeduring = 30;
+startX,//点击X
+startY;//点击Y
+var endX, endY;  //滑动结束X,Y
+var box=document.getElementById("top");//需要缩放的元素
+var boxheight=parseInt(box.offsetHeight); //box高度，用来计算scale
+var transy=0;//Y轴位移量
+var scale=1;//box缩放值
+var easestart = 0, easeduring = 30;//requestAnimationFrame开始结束
 
 document.addEventListener("touchstart",function(e){// 
 	startTop=document.documentElement.scrollTop || document.body.scrollTop;;
 	startX=e.changedTouches[0].pageX;
 	startY=e.changedTouches[0].pageY;
-	direct="down";
 	easestart = 0;
 	scale=1;
 })
@@ -99,22 +96,12 @@ document.addEventListener("touchmove",function(e){
 	if((endY-startY)>0){
 		if(dPos<0){
 			if(startTop<=0){
-				direct="up"
-			}else{
-				direct="down"
+				e.preventDefault();
+				transy=Math.abs(endY-startY);
+				scale=1+transy/(2*boxheight);
+				box.style.transform="scale("+scale+")";
 			}
-		}else{
-			direct="down"
 		}
-	}else{
-		direct="down"
-	}
-	
-	if(direct=="up"){
-		e.preventDefault();
-		transy=Math.abs(endY-startY);
-		scale=1+transy/(2*boxheight);
-		box.style.transform="scale("+scale+")";
 	}
 },false);
 
@@ -131,7 +118,6 @@ var resetObj=function(){
 		box.style.transform="scale("+newscale+")";
 		requestAnimationFrame(resetObj);
 	}
-	document.getElementById("out");
 }
 
 document.addEventListener("touchend",function(e){
