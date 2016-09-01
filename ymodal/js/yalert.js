@@ -12,8 +12,11 @@ function includeLinkStyle(url) {
     var link = document.createElement("link");
     link.rel = "stylesheet";
     link.type = "text/css";
-    link.href = url;
-    document.getElementsByTagName("head")[0].appendChild(link);
+    link.href = url; 
+    link.id="yalertCss";
+    if($("#yalertCss").length<=0){
+        document.getElementsByTagName("head")[0].appendChild(link);
+    }
 }
 function showAlert(t,m,stylepath,fn){
     //用来引入样式，如果直接写入样式stylepath设为:"";
